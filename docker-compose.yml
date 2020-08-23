@@ -1,0 +1,21 @@
+version: '2.4'
+
+services:
+  api:
+    container_name: devcamper
+    init: true
+    command: nodemon app.js
+    build:
+      context: .
+      target: dev
+    ports:
+      - '5000:5000'
+    volumes:
+      - .:/app
+  #   depends_on:
+  #     - mongo
+  # mongo:
+  #   container_name: devcamperdb
+  #   image: mongo
+  #   ports:
+  #     - '27017:27017'
