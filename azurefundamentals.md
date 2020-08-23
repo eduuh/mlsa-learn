@@ -782,6 +782,8 @@ The **setting**sections givec you acess to configure various aspects such as app
 
 - Azure cloud shell is browser-based command-line experience for managing and developing.- Azure resource.
 
+- Azure Cloud Shell is an interactive shell for managing Azure resources. You can control and administer all of your Azure resources in the current subscription through a command-line interface built right into the portal.
+
 - cloud shell provides two experiences to choose from, Bash and powerShell.
 
   - Both include access to azrure command-line interface called **Azure CLI and Azure Powershell**
@@ -843,6 +845,8 @@ A **region** is a geographical on the planet containing at least one, but potent
 
 ![data centers regions](images/2-regions-small.png)
 
+Azure organizes infrastructure around regions, which include multiple datacenters. You can pick the region you want resources deployed into. You can't select a specific datacenter or location within a datacenter.
+
 ### Why is this important?
 
 - Azure has more global regions than any other cloud provider.
@@ -876,3 +880,871 @@ Geographices are broken up into the following areas:
 - Middle East and Africa
 
 Each region belongs to a single geography and has specific availability, complance and data residency/sovereignty rules applied to it.
+
+## undertand Availability Zone in Azure
+
+- ensure your services and data are redundant so you can protect your information in caes of failure.
+  - Create duplicate hardware environments
+  - Azure can help make your app highly availabe through Availability zones.
+
+### What is an availability Zone?
+
+- Availability zones are physically separate datacenters within an Azure region
+- Each availability zone is made up of one or more datacenters equipped with independent power, cooling and networking.
+- Availability Zones are connected through **high-speed** ,**private fiber optics networks.**.
+
+### Supported regions
+
+Not every regions has support for Availability Zones.
+
+- central US
+- East US 2
+- West US 2
+- West Europe
+- France Central
+- North Europe.
+  -Southeast Asia.
+
+### Using Availability zones in your apps.
+
+Availability Zones are datacenters set up to be an isolation boundary from others in the region, with their own power, cooling, and networking. If one zone in a region goes down, other Availability Zones in the region continue to work.
+
+You can use **Availability Zones** to run mission critical applicaitons and build high availability into your application architecture by co-location your \*\*compute,storage,networking and tata resources within a zone and replication in othre zones. keep in mind that there could be a cost to duplication your services and transferiing data between zones.
+
+Availability zones are primarily for VMs , managed disks , Load balancers and SQL databases, Azure services that support Availability zones falls into two categories.
+
+**Zonal Services** - You pin the resources to a specific zone i.e Vms , manged disks and ip addresses.
+
+**Zone-redundant-services**- Platform replicates automatically across zones (for example zones redundant storage, SQL Database.)
+
+### Region Pairs in Azure.
+
+- Availability zones are created using one or more datacenters, and there is a minimum of three zones within a single regions.
+- It's possible that a large enough disaster could couse an outage large enough to affect even tow datacenters. That's why azure also creates a **region pair**.
+
+- Each Azure region is always paired with another region within the same geography at least 300 miles away
+  - This approch allows for the replication of resources (virtual machine storage) across a geography that help reduce the likelihood of interruptions due to events such as natural disaster, civil unrest, power outage.
+
+![region pairs](images/5-region-pairs.png)
+
+- Additional advantages of regions pairs includes.
+  - If there's an extensive Azure outage, one region out of every pair is prioritized to make sure at least one is restored as quick as possible for applications hosted in that region pair.
+  - Planned Azure updates are rolled out to paired regions one region at a time to minimize downtime and risk of application outage.
+  - Data continues to reside within the same geography as its pair (except for Brazil South) for tax and law enforcement jurisdiction purposes.
+
+### Undestand services-level Agreements for Azure.
+
+- Microsoft maitains its commitment to providing customers with high quality products and services by adhering to comprehensive operational policies, standards and practices.
+
+- Formal documents called services Level Agrements (SLAS) capture the specific term that defines the performance standards that apply to Azrue.
+
+- SLAs describe Microsoft's commitment to providing Azure customers with specific performance standards.
+- There are SLAs for individual Azure products and services.
+- SLAs also specify what happens if a service or product fails to perform to a governing SLA's specification.
+
+- note:
+  - Azure does not provide SLAs for most services under the Free or Shared tiers. Also, free products such as Azure Advisor do not typically have an SLA.
+
+### SLAs for Azure products and services
+
+There are three key characteristics of SLAs for Azure products and services:
+
+1. Performance Targets
+2. Uptime and Connectivity Guarantees
+3. Service credits
+
+#### Performance Targets.
+
+- The performance targets that an SLA defines are specific to each Azure product and services.
+
+#### Uptime and Connectivity Guarantees
+
+- typical SLA specifies performace-target commitments that ranger form 99.9 percent to 99.999% for each corresponding Azure products.
+
+The followign table list the potential cummultaive downtime for various SLA levels over different durations:
+UPTIME AND CONNECTIVITY GUARANTEES
+
+| SLA %  | Downtime per week | Downtime per month | Downtime per year |
+| ------ | ----------------- | ------------------ | ----------------- |
+| 99     | 1.68 hours        | 7.2 hours          | 3.65 days         |
+| 99.9   | 10.1 minutes      | 43.2 minutes       | 8.76 hours        |
+| 99.95  | 5 minutes         | 21.6 minutes       | 4.38 hours        |
+| 99.99  | 1.01 minutes      | 4.32 minutes       | 52.56 minutes     |
+| 99.999 | 6 seconds         | 25.9 seconds       | 5.26 minutes      |
+
+- SLA of Azure cosmos DB(Database) service SLA offers 99.999% uptime.
+  - Includes low-latency commitments of less than 10 milliseconds on DB reads and write.
+
+#### Service Credits.
+
+- SLAs also decribe how microsoft will respond if an Azure product or service fails to perform to its governing SLA's specification.
+  - Customer may have a discout applied to their Azure bill, as compesation for and underperforming Azure product or service.
+
+The firt column in the table below shows monthly uptime percentage SLA targets for a single instance Azure virtual Machine.
+
+| MONTHLY UPTIME PERCENTAGE | SERVICE CREDIT PERCENTAGE |
+| ------------------------- | ------------------------- |
+| < 99.9                    | 10                        |
+| < 99                      | 25                        |
+| < 95                      | 100                       |
+
+## Compose SLAs across services.
+
+When combining **SLAs** across different service offering , the resultant SLA is called **Composite SLA** .
+
+### Calculation downtime
+
+- consider the two.
+
+![web app / sql database ](images/7-sla-compositesla1.png)
+
+```math
+99.95 percent \* 99.99 percent = 99.94 percent
+
+0.9995 \* 0.9999 = 0.9994
+```
+
+- **combined probatility of failure** is higher that the individual SLA value.
+  - An application that relies on multiple services has more potential failure points.
+- You can improve the composite SLA by creating independet fallbacks paths. i.e if the sql Database is unavailable you can put transactions into a queue for processing at a later time.
+
+## How to improve your app reliability in Azure.
+
+- You can use **SLAs** to evaluate how azure solutions meet business requirements and the needs of your client and users.
+- By creating you own SLAs you can set performance targets to suits your specific Azure applicaitons. (Applicaiton SLA)
+
+### Understand your app requirement.
+
+- building an efficient and reliable Azure solution requires knowing your workload requirements
+- You can then select Azure products and services and provision resources according to those requirements.
+
+- In a distributed system, failures will happen. Hardware can fail. The network can have transient failures. It's rare for an entire service or region to experience a disruption.
+
+### Resiliency.
+
+**Resiliency** is the ability of a system to recover from failures and continu to function but responding to failures in ways that avoids downtime or dataloss.
+
+- The goal is return the application to a fully functioning state following a failure.
+- When designing your archicture you need to design for resiliency, and you should perform a **Failure Mode Analysis(FMA)**
+
+### Cost and Complexity Vs High availability
+
+- **Availability** referst to the time that a system functional and working.
+  - Maximizing availability requires implementing measures to prevent possible service failures.
+- As your solution grows in complexity, you will have more services depending on each other.
+
+A workload that requires 99.99 percent uptime shouldn't depend upon a service with a 99.9 percent SLA.
+
+- Most provider prefer to maximize the availability of their Azure solutions by minimizing downtime.
+- Increasing availability,you also increase the cost and complexity of your solution.
+
+The risk of potential downtime is cumulative across various SLA levels, which means that complex solutison can face greater availability challenges.
+
+### Considerations for defining application SLAs
+
+- If your application SLA defines four 9's (99.99%) performance targets, recovering from failures by manual intervention may not be enough to fulfill your SLA. Your Azure solution must be self-diagnosing and self-healing instead.
+
+- It is difficult to respond to failures quickly enough to meet SLA performance targets above four 9's.
+
+Carefully consider the time window against which your application SLA performance targets are measured. The smaller the time window, the tighter the tolerances. If you define your application SLA as hourly or daily uptime, you need to understand these tighter tolerances might not allow for achievable performance targets.
+
+### Core Cloud Services - Manages Services with the Azure portal.
+
+- Azure is a cloud platform that provides the compute, storage and networking resource needed to build cloud-hosted application.
+- As a new user, the azure portal is likely to be the primary way you will interact with Azure.
+- The azure portal lets you.
+
+  - Create and manage all your Azure resources. - setting up a new database, increase the compute power of your Virtual machines - Monitor you monthly costs.
+    It's also a great leaning tool since you can survey all available resource and use guided
+    wizards to create the ones you need.
+
+- Here you will learn how to sign in to the portal and navigate the portal interface.
+  - you will also leanr how to customize the dashboard, so it is convenient to loate and monitor your most essential services.
+
+#### Azure Management Options
+
+- You can configure and manage Azure using a broad range of tools and platforms.
+
+  - There are tools available for the command line
+    - Language-specific software Development kIts (SDks), developer tools, tools of migrations
+
+- Tools that are commonly used for day- to day management and interaction include
+  - **Azure portal** for interacting with Azure via a Graphical User Interface (GUI)
+  - **Azure poweshell and Azure Command-line interfaces(CLI)** for command line and utomation based interactions with Azure.
+  - **Azure cloud shell** for a web based command-line interface.
+  - **\_Azure mobile app** for monitoring and managing your resources from you mobile device.
+
+##### Azure portal
+
+- Azure portal is a public website you can use with any web browser.
+
+  - Once again **you sign in to your Azure account**
+  - You can create, manage and monitor any availabe Azure services.
+  - You can identify a service you're looking for get links on a topic and deploy ,manage and delete resources.
+  - The dashboard view provides high-lever details about your azure environment.
+    - You can customizer the dashboard by moving and resizing tiles and disglaying services you're intrested in.
+    - The portal doen't **provide any way to automate repetitive tasks**.
+      - **To set up multiple VMs you would need to create them on one of a time by completing the wizard for each VM**
+        - the process makest the portal approach **time-consuming and error-prone for complex tasks**
+
+- Azure dashboards are stored as JSON files, which allow them to be uploaded and downloaded to share with other members of the Azure directory.
+
+### Azure PowerShell
+
+- Azure powershell is a module that you can install **in windows powershell or Powershell core**
+  - Powershell core is cross-platform version of Powershell that runs on Windows,linux and macos
+    - Azure powershell enables you to connect to your azure subscription and manage resources.
+- Provides services such as the **shell window and commang parsing**
+
+  - Then add azure specific commands.
+
+- Azure Powershell provides the **New-azVM** command that create a virtual machine for you inside your **Azure subscription**.
+
+- Creating administration scripts and using automation tools is a powerful way to optiomize your workflow.
+- you can automaete repetitive tasks. Once a scripti is verfied, it runs consistently, whic anc reduce errors .
+  - Another scripting environment is the **Azure CLI**
+
+### Azure CLI
+
+- Azure CLI is a **cross-platform** command-line programs that connects to Azure and execuste admin
+  commands on Azure resources.
+- **Cross-plaform** means that ican be run **windows, linux or macOs**
+  - You can create a VM, You would open a command prompt window, sign in to Azure using the command
+    **az login** to create a resource group.
+
+### Azure Cloud Shell
+
+- Azure Cloud shell is an interactive, authenticated, browser-accessible shell for managing azure resources.
+
+  - It provids the flexibility fo choosing the shell experience that best suits the way you work, either **Bash or Powershell**
+
+- You can swithc between the tow shells both support the Azure CLI and Azure powershell modules.
+- Bash defaults to the Azure CLI (with the az command pre-installed) but you can swith to powershell core within lnux by typing **pwsh**
+
+The **powershell environment** has both CLI tools pre-installed.
+
+- The cloud shell has a suite of developer tools and text editors, and other tools available
+
+#### Developer Tools
+
+- .NET Core
+- Python
+- Java
+- Node.js
+- Go
+- Editors
+
+#### code (Cloud Shell Editor)
+
+- vim
+- nano
+- emacs
+
+#### Other tools
+
+- git
+- maven
+- make
+- npm
+
+  - You can create, build, and deploy apps right from this browser-based enviroment.
+  - It's all persistend.
+    - You are prompted to creat an **Azure Storage** when you access the cloud shell
+      - This storage are is ude as your **\$HOME** folder and any scripts or data you place here is kept across sessions.
+        - Note: each subsrciption has a unique storage account associated with it, you can keep the data and tools you need specific to each account you manage.
+
+#### Azure mobile app
+
+The **Microsoft Azure mobile app** allows you to acess, manage and monitor all younr Azure accounts. - resources from your iOS or Android phone or tablet , Once installed you can - Check the current status and important metrics of your services. - Stay informed with notifications and alerts about important health issues. - Quickly diagnose and fix issues anytime, anywhere - Review the latest Azure alerts. - Start, stop and restart Virtual machine or web apps. - Connect to you virtual machine. - Manage permissions with role-based access control (RBAC) - Use the Azure cloud shell to run saved scripts or perform ad hoc administativ tasks.
+
+#### Other options.
+
+There are also **Azure SDK's** for ranger of languages and frameworks, and REST APIs that you can use to **manage and control Azure resources Programmatically**
+
+### Navigate the Portal.
+
+#### Azure portal Layout
+
+- **Resource panel** - The left-hand sidebar of the portal is the resource panel.
+
+  - Azure has more resources types than those shown there.
+  - You can cutomize this with the specifi resource types you tend to create or administer most.
+
+- **What is the Azure Marketplace** The Azure Marketplace is often where you start when creating new resources in Azure. The marketplace allows customers to find try purchase, and provision application and services from hundreds of leading services providers, **all certified to run on Azure**.
+
+- The solution catalog spans several industry categories, including but not limited to Open-source ontainer plaform, virtual machine, databases , application build and deployment software, deveploper tools thread detection and blockchain.
+
+- **Configuring settings in the Azure portal** The azure portal displays several configuration options, mostly in the status bar at the **top-right** of the screen.
+
+- If your are viewing the Azure portal on a screen and with reduce horizontal space, the following icons may be made availabe through an ellipsis.
+
+- **Cloud shell**
+
+  - If you select the **cloud shell** icon (>) you create a new **Azure Cloud Shell sessions**
+
+- **Directory and subscription**
+- Select **book and filter** icon to show \_\_Direcotry + subscripiton pane.
+- Azure allows you to have more than one subscription associated with one directory.
+
+  - On the **Directory + Subscription** pane , you can change between subscription.
+
+- **Notifications**
+
+- Selecting the bell icon display the **Notifications** pane. This pane list the last actions that have been carried out, along with ther status
+
+- **Settings**
+- Select the **gear** icon to change the Azure portal settings. These settings include:
+
+  - Incactivity sign out delay
+  - Defautl view when you first sigh in.
+  - Flyout or docket option for the portal menu.
+  - Color and costrast themes.
+  - Toast notification (to a mobile device.)
+
+- **Help pane**
+- Help + Support
+  - Opens the main help and support are for Azure and documentations option for commaon questions.
+- What's new
+- Azure roadmap
+- Launch guided tour
+- Keyboard shortcuts
+- Show diagnostics
+- Privacy statement
+
+- **Feedback pane**
+  The **smiley face** icon opens the **send us Feedback**
+
+- **Profile settings**
+  - Sign in with another account or sigh out entirely.
+  - View your account profile, where you can change your password.
+
+Select the ".." button on the right-hand side for options to: - Check your permissions. - View your bill - Update your contact information
+
+- **Azure advisor**
+
+With Azure Advisor, you can:
+
+- Get proactive, actionable, and personalized best practices recommendations.
+- Improve the performance, security, and high availability of your resources as you identify opportunities to reduce your overall Azure costs.
+- Get recommendations with proposed actions inline.
+
+- Azure Advisor is a free service built into Azure that provides recommendations on high availability, security, performance, and cost.
+
+Access public and private preview features
+
+Microsoft offers previews of Azure features for evaluation purposes. With Azure Preview Features, you can test beta and other pre-release features, products, services, software, and regions.
+
+Some of the common areas you will see previews for include:
+
+New storage types
+New Azure services, such as Machine Learning enhancements
+New or enhanced integration with other platforms
+New APIs for services
+Azure feature previews are available under certain terms and conditions that are specific to each particular Azure preview. Also, some previews are not covered by customer support.
+
+Once a feature has been evaluated and tested successfully, it might be released to customers as part of Azure's default product set. This release is referred to as General Availability (GA).
+
+Feature preview categories
+There are two types of previews available:
+
+Private Preview. An Azure feature marked "private preview" is available to specific Azure customers for evaluation purposes. This is typically by invite only and issued directly by the product team responsible for the feature or service.
+Public Preview. An Azure feature marked "public preview" is available to all Azure customers for evaluation purposes. These previews can be turned on through the preview features page as detailed below.
+Finding preview features
+You can learn about preview features through the preview features page . This page lists the preview features that are available for evaluation. To access a preview feature, select its entry on this page and learn more about how to evaluate it. You can also use the RSS Feed button on this page to subscribe to notifications and stay informed.
+
+You can also find Azure preview features in the portal as follows:
+
+Sign in to Azure portal.
+Select Create a resource in the resources panel to open the New pane.
+Enter the word preview into the search box at the top of the New pane.
+A list of available preview features is displayed, with the word (preview) next to each one.
+Azure portal preview features
+Another preview area you can try is the next version of the Azure portal. Use the URL https://preview.portal.azure.com (notice the preview prefix).
+
+Typical portal preview features provide performance, navigation, and accessibility improvements to the Azure portal interface. It will be branded with Microsoft Azure (Preview) in the top bar, so you will know you are in the preview portal.
+
+Provide feedback on preview features
+If you utilize the preview portal or a preview feature, Microsoft wants to hear about your experience. You can provide feedback through the "smiley" face icon on the portal or by posting ideas and suggestions on the Azure portal Feedback Forum.
+
+Get notified about GA releases
+The Azure portal "What's New" link on the help menu (?) provides a list of recent updates you can periodically check to see what's changed in Azure.
+
+Alternatively, you can use the Azure Updates page. This page provides additional information and features including:
+
+Which updates are in general availability, preview, or development.
+Browse updates by product category or update type, by using the provided dropdown lists.
+Search for updates by keyword by entering search terms into a text-entry field.
+Subscribe to get Azure update notifications by RSS.
+
+### Azure compute options.
+
+- Azure compute is an on-demand computing for running cloud-based applications.
+- It provides computing resources like multi-core processor and super-computers via virtual machines
+  - Or containers.
+- The resources are available on-demand and can typically be created in minutes or even seconds.
+- You pay only for the resources you use and only for as long as you're using them.
+
+- The four common techiques for performing compute in Azure.
+  - Virtual machines.
+  - Containers.
+  - Azure app Service.
+  - Serverless Computing
+
+### What are virtual machines?
+
+- **Virtual machines** are software emulations of physical computers.
+- provide **infrastructure as a service (Iaas)** in the form of virtualized server
+- **VMs** are ideal choice when you need:
+
+  - Total controal over the operating system (OS)
+  - The ability to run custom software.
+  - To use custom hosting configuration.
+
+  - They inclued a virtual procerros, memory, storage and networking resources.
+  - They host an operating system (OS)
+    - you're able to install and run software just like a physical computer.
+    - And by using a remote desktop client , you can use and control the virtual machine
+
+- Azure VM gives you the flexibilty of virtualization without the need to bui and maintain the physical hardware that runs the VM. (**you still need to maintain the vm**)
+
+#### Examples of when to use virtual machines.
+
+1. **During testing and development**. Vms provides a quick and easy way to create different OS and application configurations.
+2. **When running application in the cloud**
+3. **When extending your datacenter to the cloud**
+4. **During distaster recovery**
+
+- **Containers** are virtualization environments for running applications.
+- Just like VMs containers run on top of a host operating system.
+  - But unlike containers they don't include operating system for apps running inside the container.
+- Container bundles the libraries and components needet to run the application and use the existing host os running the container.
+
+- **Azure App Service** is a platform as a service (PaaS) offering in Azure that is designe to host enterprise grade web-oriented application.
+  -You can meed rigorous performance, scalability, security and compliance requirements.
+  -While using a full manged platform to perform infrastructur maintenance.
+
+- **Serverless Computing** serverless computing is a cloud-hosted execution environment that runs your code but completely abstracts the underlying hosting environment.
+
+- you can create an instance of the service and you add your code no infrastructure configuration or maintenance is required , or even allowed.
+
+### Which computing strategy is right for me?
+
+- You don't need to take an **all or nothing** approach when choosng a cloud computing strategy.
+- virtual machines, containers, App Services and Serverless computing each provide benefits as well as tradeoffs agaist other options.
+
+- Although serverless computing removers the need for you to manage infrastructure, serverless computing expecst work to be completed quickly: usually within seconds or less.
+
+- You might run your core application on a virtual machine or container but offload some of the data processing onto a serverless app.
+
+## Virtual Machines in Details
+
+### Moving to the cloud with Vms
+
+- VMs are also and exellent choice when moving from a physical server to the cloud (**lift and shift**).
+
+- You can create an image of the physical server and host it withina VM with little or no changes.
+
+- Just like a physical on-premises server, you must maintain the VM. You update the installed OS and the software it runs.
+
+### Scalling VMs in Azure.
+
+You can run single VMs for testing , development or minor tasks; you can group VMs together to provide high availability, scalability and redundancy.
+
+- Azure has several features such that, no matter your uptime requirements are , Azure can meed them.
+
+  - Availability sets.
+  - Virtual Machine Scale Sets.
+  - Azure Batch.
+
+### what are availability sets?
+
+An **availability set** is a logical grouping of two or more VMs that help keep your application available during planned or unplanned maintenace.
+
+**A planned maitenace event** is when underlying Azure fabric that hosts VMs is updated by Microsoft. A planned maintenace event is done to patch security vulnerabilities, improve performace and add or update features.
+
+**Unplanned maintenance event** involve a hardware failure in the data center, such as a server power outage or disk failure. VMS that are part of an availability set automatically switch to working physical server so the VM continues to run. The group of virtual machines that share commonn hardware are in the same **fault domain**
+
+A **fault domain** is essentially a rack of servers. It provides the physical separation of your workload across different power, cooling and networking hardware that support the physical servers in the datacenters server rank.
+
+With an availables set you get.
+
+-Up to three fault domains that each have a server rack with dedicated power and netwrok resources.
+-Five logical update domains which can be increased to a maximum of 20
+
+A diagram that shows example where you have six VMs in two availablity sets distrubuted across the two fault domains and five update domains.
+
+![Vms fault torelance](images/3-availability-sets.png)
+
+There's no cost for an availability set. You only pay for the VMS witin the availability set.
+
+- It recommended that you place each workload in an availability set to avaid having a single point of failure in your VM architecture.
+
+## What are virtual machine scale sets?
+
+- Azure virtual Machine scale sets let you create and manage a group of identical, load balanced VMs.
+
+- Scale sets allows you to centrally manage, configure and update a large number of vims in minutes to provide highly availabe applications.
+
+## What is Azure Batch ?
+
+Azure Batch enable large-scale job sheduling and compute management with ability to scale to tens, hundreds or thousands of vMs.
+
+- When you're ready to tun a Job, Batch does the following
+
+- Start a pool of compute Vms for you.
+- install application and staging data.
+- Runs jobs with as any tasks as you have.
+- Identifies failures.
+- Requeuse work
+- Scale down the pool as work completes.
+
+### Explore containers in Azure
+
+if you wish to run multiple instances of an application can a sigle host machine , ontainer are an excellent choice . The contianer orchestrator can \*\*start , stop and scale out application instance as needed.
+
+- A container doen't use virtualization, os it doesn't waste resource simulating virtual hardware with a redundant OS.
+- The environment typically makes containers more lightweight that VMs.
+- This design allows you to respond quickly to change in demand or failuer.
+- Another benefit of container is you can run multiple isolated application on a single ccontainer host.
+
+#### Container in Azure
+
+Azure support Docker container (a standardized container model) and there are several ways to manage container in Azure.
+
+- Azure Container instance (ACI)
+- Azure Kubernetes Service (AKS)
+
+#### Azure container Instances.
+
+Azure container Instances (ACI) offerst the fastest and simplest way to run a container in Azure.
+
+#### Azure kubernetes Service.
+
+The task of automating, managing and interacting with a large number of container is known as archestration. Azure kubernetes Service (AKS) s a complete orchestration service for containers with distribute arhitecture with multiple containers.
+
+#### using containers in your solutions.
+
+-Container are often used to create solutions using a **microservice architecture** . This architecuture is where you break solutions into smaller, independend pieces.
+
+-For examle you may split a website into a container hosting your front end and another hosting your backen and third for storage.
+
+#### Migrating apps to containers.
+
+- You can move existing applications to container and run then within AKS.
+- You can control access via integration with **Azure Active dirctory (Azure AD)** and **acess service Level Agreement(SLA)- Backed Azure services**, \*\*azure Database for Mysql for any data needs.
+
+![Migrating apps to containers](images/4-kub-migration.png)
+
+### explore Azure App service
+
+- Azure App services enable you to build and host web apps, background jobs, mobile backends and Restful Apis in the programing language of your choice.
+
+- App services suppost both windows and linux and enables automated deployment from Github, Azure DevOps ro any Git repo to support a continuous deployment model.
+
+- This platofrm as a service (Paas) allows you to focus on the website and API logic while Azure handle the infrastucture to run and scale your web applications.
+
+#### App Service costs.
+
+- You pay for the Azure compute resources your app uses while it processes requesst based on the App service plan you choose.
+
+- The App service plan determines how much hardware is devoted to your host - whether it's dedicated or shared hardware an how much memory is reserved for it. There is even a **free tier** you can use to host small, low-traffic sites.
+
+#### Types of app services.
+
+With Azure App service you can host most common app service styles, including.
+
+- Web Apps.
+- API Apps.
+- WebJobs.
+- Mobile Apps
+
+Azure App service handles most of the infrastructure decisions you deal with in hosting web-accessible apps:
+
+- deploymend and management are intergrated into the platform
+- endponds can be secured, sites can be scaled quickly to handle high traffic loads.
+- build-in loa balancing and traffic manager provide high availability.
+
+##### Web apps.
+
+App service include full support for hosting web apps using **ASP.NET**, **ASP.NET core**, java, Ruby, Node.js PHP or PYTHON.
+
+##### Api apps
+
+Much like hosting a website, you can build REST-based Web Apis using your choice of language and framework. You get full Swagger support and the ability to package and publish your API in the Azure MarketPlace.
+
+##### Web jobs
+
+Webjobs allow you to run a program (.exe, java, PHP, Python, or Node.js) in the same context as a web app, APi app, or Mobile app.
+
+- They can be scheuled, or run by a trigger. WebJobs are often used to run background tasks as part of your application logic.
+
+#### Mobile app back-ends
+
+Use the Mobile Apps feature of Azure Service to quickly build a back-end for IOS and Android apps. Azure portal you can:
+
+- Store mobile app data in a cloud-based SQL database.
+- Authenticate customers agaist common social provide.
+- Send push notifications.
+- Execute custom back-end login in C# or Node.js
+
+On the mobile app side, there is SDK support for native iOS & Android , Xamarin and React native apps.
+
+### Explore Serverless Computing In Azure
+
+Serverless computing is the abstraction of servers, infrastructure and OSs. With **serverless computing** Azure takes care of managing the server infrastructure and allocation/deallocation of resources base on demand.
+
+- Infrastructure isn't your responsibility.
+- Scalling and performance are hanled automatically and you are billed only for the exact resources you use. There's no need t even reserve capacity.
+
+Serverless computing encompasses three ideas: the abstraaction of servers, and event-driven scale and micro-biling.
+
+1. **Abstraction of servers** : serverless computing abstracts the servers you run on. You never explicity reserve server instances; the platfor manages that for you.
+
+2. **Event-driven scale** Serverless computing is an excellent fit for workload that respond to incoming events. Events include triggers by timer needs to run every day at 10:00 AM UTC
+
+3. **Micro-billing:** Traditional computing has the notion of per-second billing, but often that's not as useful as it seems. Even if a customer's website get only one hit a day, they still pay for a full day's worth of availability.
+
+With serverless computing, they pay only for the time their code runs. If no active function execution occurs , they're not charged. If the code runs once a day for two minutse, they're charged for one execution and two minutes of compution time.
+
+Azure has two implemetations of serverless compute.
+
+- **Azure functions** which can execute code in almost any modern language.
+- **Azure Logic Apps** which are designed in a web-based designer and can execute logic triggered by Azure services without writing any code.
+
+1. Azure Functions.
+2. Azure Logic Apps.
+3. Functions Vs. Logic Apps
+
+Functions and logic Apps can both create complex orchestrations. An orchestration is collection of functions or steps, that are executed to accomplish a complex task. With Azure functions, you write code to complete each step, with Logic Apps, you use a GUI to define the actions and how they relate to one another.
+
+You can mix and match service when you build an archestration, calling functions from logic apps and calling logic apps from functions . Here are some common differences between the two.
+
+### Functions Vs. Logic Apps
+
+Functions and logic Apps can both create complex orchestrations.
+An orchestration is a collection of function or step
+
+- Executed to accomplish a complex task.
+- With Azure functions, you write code to complete each step.
+- With logic Apps, you use a GUI to define the actions and how they relate to one another.
+
+- | Functions         | Logic Apps                                                            |
+  | ----------------- | --------------------------------------------------------------------- |
+  | State             | Normally stateless, but Durable Functions provide state               | Stateful |
+  | Development       | Code-first (imperative)                                               | Designer-first (declarative) |
+  | Connectivity      | About a dozen built-in binding types, write code for custom bindings  | Large collection of connectors, Enterprise Integration Pack for B2B scenarios, build custom connectors |
+  | Actions           | Each activity is an Azure function; write code for activity functions | Large collection of ready-made actions |
+  | Monitoring        | Azure Application Insights                                            | Azure portal, Log Analytics |
+  | Management        | REST API, Visual Studio                                               | Azure portal, REST API, PowerShell, Visual Studio |
+  | Execution context | Can run locally or in the cloud                                       | Runs only in the cloud. |
+
+- You have full control over the VM setup, so you can configure it to match your on-premises server. This control will allow your existing application to run on the Azure VM with little or no change.
+
+- The photo-sharing app is event driven and needs to handle unpredictable demand. Serverless computing is a good fit for this situation because it is event-based and can scale instantly to process spikes in traffic. It should also be a cost-effective choice because you will pay for compute time only when processing user data.
+
+- Virtual machines give you full control over the environment. Containers give you limited control. Serverless computing does not allow you to do any infrastructure configuration.
+
+### Core cloud Services - Azure data storage options
+
+### Benefits of using Azure to store data
+
+Here are some of the important benefits of Azure data storage:
+
+- **Automated backup and recovery:** mitigates the risk of losing your data if there is any unforeseen failure or interruption.
+- **Replication across the globe:** copies your data to protect it against any planned or unplanned events, such as scheduled maintenance or hardware failures. You can choose to replicate your data at multiple locations across the globe.
+- **Support for data analytics:** supports performing analytics on your data consumption.
+- **Encryption capabilities:** data is encrypted to make it highly secure; you also have tight control over who can access the data.
+- **Multiple data types:** Azure can store almost any type of data you need. It can handle video files, text files, and even large binary files like virtual hard disks. It also has many options for your relational and NoSQL data.
+- **Data storage in virtual disks:** Azure also has the capability of storing up to 32 TB of data in its virtual disks. This capability is significant when you're storing heavy data such as videos and simulations.
+- **Storage tiers:** storage tiers to prioritize access to data based on frequently used versus rarely used information.
+
+### Types of data.
+
+There are three primary types of data that Azure storage is designed to hold.
+
+1. **Structured data**
+
+- Relational data.
+- data that adheres to a schema
+- data has the same fields or properties.
+- Structured data relies on keys to indicate how one row in a table relates to data in another row on another table.
+
+2. **Semi-structured data**
+
+- Semi-structured data doen't fit neatly into tables, rowns and columns.
+- Semi-structured data uses tags or keys that organize and provide a hierachy for the data.
+- Structured data is also referred to as **relational data** as the data's scheme defines the table of data, the fields in the table and the clear relatioships betwen the two.
+
+3. **Unstructured data.**
+
+- no designated structure to it.
+- This lack of structure also means that there are no restriction on the kinds of data it can hold.
+
+### How Azure data storage can meet your business storage needs.
+
+1. Azure SQL Database.
+2. Azure Cosmos Db.
+3. Azure Blob Storage.
+4. Azure Data Lake Storage.
+5. Azure Files.
+6. Azure Queue
+7. Disk Storage.
+
+#### Storage tiers
+
+Azure offers three storage tiers for blob object storage
+
+1. **Hot storage tier** optimized for storing data that is accessed frequently.
+2. **Cool storage tier** optimized of data that are infrequently accessed and stored for at least 30 days.
+3. **Archive storage tier** for data that are rarely accessed and stored for at least 180 days with flexible latency requirements.
+
+Azure data storage is flexible. You can quickly and easily add or remove capacity. You can increase performance to handle spikes in load or decrease performance to reduce costs. In all cases, you pay for only what you use.
+
+##### Encryption and replication.
+
+Azure provides security and high availability to your data through encryption and replication feautures.
+
+##### Encryption for storage services.
+
+The following encryption type are available for your resources.
+
+1. **Azure storage service Encryption(SSE)** for data at rest helps you secure your data to meet the organization's security and regulatory compliance. It encrypts the data before storing it and decrypt the data before returning it.
+
+2. **Client-side encryption** is where the data is already encrypted by the client libraries. Azure store the data in the encrypted stat at rest, which is then decrypted during retrieval.
+
+##### Replication for storage availablity.
+
+A replication type is set when you create a storage account. The replication feature ensure that your data is durable and always availabe.
+
+Azure provides regional and geographic replicatin to protect your data agaist natural distasters and other local distaster like fire or flooding.
+
+##### Comparison between Azure data storage and onpremises storage.
+
+1. Cost effectiveness.
+2. Reliability.
+3. Storage types.
+4. Agility.
+
+> ##### Benefits of Azure
+
+- Storage of both structured and unstructured data
+- High security that supports global compliance standards
+- Load balancing, high availability, and redundancy capabilities
+- The ability to send large volumes of data directly to the browser using features such as Azure Blob storage
+
+## Azure networking
+
+- managing networks on Azure isn't entirely differntl from managing on-premises networks.
+
+### Deploy your site to Azure
+
+- your first step will likely be to re-create your on-premises configurations in the cloud
+
+### Using an N-tier architecture.
+
+- An achitecural pattern that can be used to build loosely coupled system is N-tier.
+
+An **N-tier architecture** divides an application into two or more logical tiers.
+
+Tier help separte concerns and are ideally designed to be reusable . Using a tiered architecture also simplifies maintenance. Tiers can be updated or replaced independently and new tiers can be inserted if needed.
+
+**Three tier** refers to an n-tier application that has three tiers. Your e-commerce web application follows this three-tier architecture:
+
+1. The \*_web tier_ provides the web interface to your users through a browser.
+2. The **application tier** runs business logic.
+3. The **data tier** includes databases and other storage that hold product information and customer orders.
+
+#### What's a network security group?
+
+A network security group, or NSG, allows or denies inbound network traffic to your Azure resources. Think of a network security group as a cloud-level firewall for your network.
+
+For example, notice that the VM in the web tier allows inbound traffic on ports 22 (SSH) and 80 (HTTP). This VM's network security group allows inbound traffic over these ports from all sources. You can configure a network security group to accept traffic only from known sources, such as IP addresses that you trust.
+
+- Software enables you to treat a virtual network just like your own network. Azure maintains the physical hardware for you.
+
+- Azure regions help you deliver your apps and services closest to your users. West US and North Europe are examples.
+
+## Scale with Azure Load Balancer.
+
+**availability** refers to how long your service is up and running without interruption.
+
+**High availability** referst to a service that's up and running for a long period of time.
+
+### What is resiliency?
+
+**Resiliency** refers to sytem's ability to stay operational during abnormal conditions.
+
+These conditions include:
+
+- Natural disaster.
+- System maintennce, both planned and unplanned including software update and security patches.
+- Spike in traffic to your site.
+- Threats made by malicious parties, such as distributed denial of service, or DDos, attack
+
+What is a load balancer?
+
+A \*_load balancer_ distributes traffic evenly among each system in a pool.
+A load balancer can help you achieve both high availability and resiliency.
+
+Say you start by adding additional VMs, each configured identically, to each tier. The idea is to have additional systems ready, in case one goes down, or is serving too many users at the same time.
+
+The proble is that each VM would have its own IP address. plus you don't have a way to distribute traffic in case one system goes down or is busy. How do you connect your VMs so that they appear to the user as one system?
+
+The answer is to use a **load balancer** to distribute traffic. The load balancer becomes the entry point to the user. The user doesn't know (or need to know which system the load balancer chooses to receive the request.)
+
+Load balancing enables you to run maintenance tasks without interrupting service.
+
+## What is Azure Load Balancer?
+
+- Azure load balance is a load balancer service that Microsoft provides that helps take care of the maintenance for you.
+
+- Load Balancer supports inbound and outbound scenarions, provides low latency and high througput, and scale up to millions of flow for all Transmission Control Protocal (TCP) and user Datagram protocal (UDP) applications.
+
+- You can use Load Balancer with incoming internet traffic, internal traffic across Azure services, port forwarding for specific traffic, or outboound connectivity for VMs in your virtual network.
+
+### Azure Application Gateway
+
+If all your traffic is Http, a potentially better option is to use Azure Application Gateway is a load balancer designed for web applications. It uses Azure load balancer at the transport level and applies sophisticated URL-based routing rules to support several advanced scenarios.
+
+Herer are some of the benefits of using Azure application Gateway over a simple load balancer.
+
+- **Cookie affinity** - Useful when you want to keep a user sesion on the same backend server.
+- **SSL termination**- Application Gateway can manage your SSL certificates and pass unencrypted traffic to the backend servers to avoid enryption/decryption overhead. It also support full end-to-end encryption for application that require that.
+- **Web application firewall** - Application gateway supports a sophisticated firewall (WAF) with detailed monitoring and logging to detect malicious attacks against your network infrastrure.
+- \*_URL rule-based routes_ Application Gateway allows you to route traffic based on URL patterns , source Ip address and port to destination IP address and port.
+- **Rewrite HTTP header** You can add or remove information from the inbound and outbound HTTP headers of each request to enable important security scenario, or scrub sensitive information such as server names.o
+
+### What is a Content Delivery Network?
+
+A content delivery network (CDN) is a distributed network of servers that can efficiently deliver web content to users.
+
+It is a way to get content to user in their local region to minmize latency.
+CDN can be hosted in Azure or any other location. You can cache caontent at stategically placed physical nodes across the world and provide better performance to end users.
+
+#### What about DNS?
+
+DNS, or Domain Name System, is a way to map user-friently names to their IP addresses. You can think of DNS as the phoneboobk of the internet.
+
+For example, your domain name, contoso.com , might map to the IP address of the load balancer at the web tier, 40.65.106.192
+
+**Latency** refers to the time it takes for data to travel over the network. Latency is typically measured in milliseconds.
+
+**Bandwidth** refer to the amount of data that can fit on the connection.
+
+Latency refers to the time taken for the data to reach its destination.
+
+### How you reduce latency for users located far away geographically.
+
+1. Scale out to different regions.
+
+- One way to reduce latency is to provides exact copies of your services in more that one region.
+
+2. Use Traffic Manager to route userst to the closest endpoints.
+
+One answer is **Azure Traffic Manager**. Traffic manager uses the DNS server that's closest to the user to direct user traffic to a globally distributed endpoint.
+
+### compare Load Balancer to Traffic Manager.
+
+Azure load Balancer distributes traffic within the same region to amke your services more highly availabe and resilient. Traffic manager works at the DNS level and directs the client to a preffered endpoint. The endpoint can be to the region that's closest to your user.
+
+Load balancer and Trafic Manager both help make your service more resilient, but in slightly different ways. When Load balancers detect an unreposive Vm, it directs traffict to other Vms in the pool.
