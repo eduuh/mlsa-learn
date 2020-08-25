@@ -27,6 +27,8 @@ docker-compose run npm install express dotenv moogoose--save
 npm install colors
 ```
 
+5. Using sluginfy with mongoos middleware.
+
 ## request and response
 
 ## Headers

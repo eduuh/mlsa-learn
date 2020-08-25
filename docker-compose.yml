@@ -12,10 +12,12 @@ services:
       - '5000:5000'
     volumes:
       - .:/app
-  #   depends_on:
-  #     - mongo
-  # mongo:
-  #   container_name: devcamperdb
-  #   image: mongo
-  #   ports:
-  #     - '27017:27017'
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./data/:/data/db
+    ports:
+      - '27017:27017'

@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
       'Please add a valid email',
     ],
   },
+
+  role: {
+    type: String,
+    enum: ['user', 'publisher'],
+    default: 'user',
+  },
   password: {
     type: String,
     required: [true, 'Please add a password'],
@@ -21,11 +27,11 @@ const UserSchema = new mongoose.Schema({
     select: false,
   },
   resetPasswordToken: String,
-  resetPasswordExpires: Date,
+  resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = new mongoose.model('user', UserSchema);

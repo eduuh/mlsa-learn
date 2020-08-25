@@ -13,6 +13,7 @@ connectDB();
 
 // Route files
 const bootcamp = require('./routes/bootcamp');
+const register = require('./routes/auth');
 
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 app.use('/api/v1/bootcamps', bootcamp);
+app.use('/api/v1/auth', register);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
