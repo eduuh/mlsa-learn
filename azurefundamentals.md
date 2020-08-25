@@ -1528,15 +1528,15 @@ An orchestration is a collection of function or step
 - With Azure functions, you write code to complete each step.
 - With logic Apps, you use a GUI to define the actions and how they relate to one another.
 
-- | Functions         | Logic Apps                                                            |
-  | ----------------- | --------------------------------------------------------------------- |
-  | State             | Normally stateless, but Durable Functions provide state               | Stateful |
-  | Development       | Code-first (imperative)                                               | Designer-first (declarative) |
-  | Connectivity      | About a dozen built-in binding types, write code for custom bindings  | Large collection of connectors, Enterprise Integration Pack for B2B scenarios, build custom connectors |
-  | Actions           | Each activity is an Azure function; write code for activity functions | Large collection of ready-made actions |
-  | Monitoring        | Azure Application Insights                                            | Azure portal, Log Analytics |
-  | Management        | REST API, Visual Studio                                               | Azure portal, REST API, PowerShell, Visual Studio |
-  | Execution context | Can run locally or in the cloud                                       | Runs only in the cloud. |
+| -                 | Functions                                                             | Logic Apps                                                                                             |
+| ----------------- | --------------------------------------------------------------------- |
+| State             | Normally stateless, but Durable Functions provide state               | Stateful                                                                                               |
+| Development       | Code-first (imperative)                                               | Designer-first (declarative)                                                                           |
+| Connectivity      | About a dozen built-in binding types, write code for custom bindings  | Large collection of connectors, Enterprise Integration Pack for B2B scenarios, build custom connectors |
+| Actions           | Each activity is an Azure function; write code for activity functions | Large collection of ready-made actions                                                                 |
+| Monitoring        | Azure Application Insights                                            | Azure portal, Log Analytics                                                                            |
+| Management        | REST API, Visual Studio                                               | Azure portal, REST API, PowerShell, Visual Studio                                                      |
+| Execution context | Can run locally or in the cloud                                       | Runs only in the cloud.                                                                                |
 
 - You have full control over the VM setup, so you can configure it to match your on-premises server. This control will allow your existing application to run on the Azure VM with little or no change.
 
@@ -1748,3 +1748,793 @@ One answer is **Azure Traffic Manager**. Traffic manager uses the DNS server tha
 Azure load Balancer distributes traffic within the same region to amke your services more highly availabe and resilient. Traffic manager works at the DNS level and directs the client to a preffered endpoint. The endpoint can be to the region that's closest to your user.
 
 Load balancer and Trafic Manager both help make your service more resilient, but in slightly different ways. When Load balancers detect an unreposive Vm, it directs traffict to other Vms in the pool.
+
+### Security, Responsiblity and Trust in Azure.
+
+- Every system, architecture and application needs to be designed with security in mind.
+
+  - There's too much at risk
+  - **denial of service attacks** could prevent your customers from reaching your website or services and block you from doing business.
+  - **Defacement** of your website damages your reputation. And a data breach could be even worse.
+    - It can run hard-earned trust, while causing significant personal and financial harm.
+    - As administrator, developers and IT management, we all must work to guarantee the security of our systems.
+
+  -**Azure Event Hubs** allow you to receive and process millions of events of real-time data each second via dynamic data pipeline. Event Hubs also integrate seamlessly with other Azure services.
+
+- Security responsibility is shared with Azure.
+- Identity management provides protection , evn outside your network.
+- Encryption capabilities buid into Azure can protect your data.
+- To protect your network and virtual networks.
+
+### Securtiy is a shared responsibility.
+
+- at **VMs** and **Virtual networks** - its your responsiblity to patch and secure your operating sytem and software ase well as configure your networks.
+
+- Moving to platform as a service (Paas) outsources several security concern. At this level, azure is takin care of the operating sytem and of most foundational software like database management systems.
+- Everything is updated with the latest security patches and can be integrated with azure active directory for access controls.
+- Paas also comes with many operational advantages. Rather than building whole infrastructure and subnet for your environment . you point and click within the azure portal or run automated scripts to bring complex and secured system up and down.
+
+- With **software as a service** (Saas) you outsource almost everything. Saas is software that run with internet infrastructure.
+
+For all cloud deployment types, you own your data and identities, you are responsible for helping secure your data and identities. your on-premises resource and the cloud components you control (which vary by service type.)
+
+Regardless of the deployment type, you always retain reponsibilit for the following items.
+
+- Data
+- Endpoints.
+- Account.
+- Access Management.
+
+### A layered approach to security.
+
+- Defense in depth is stratedy that employes a series of mechanisms to slow the advance of an attack aimed at acquiring unauthorized access to information.
+
+- Each layer provides protection so that if one layer is breached, a subsequent layer is already in place to prevent further exposure.
+- Microsof applies a layered approach to security.
+- Both in **physical data centers and accross Azure services.**
+- The objective of defense is to prevent information from being stolen by individuals who are not authorized to access it.
+
+- Defence in depth can be visualized as a set of concetric rings, with the data to be secured at the center .
+
+  - Each ring adds an additional layer of security around data.
+    - This approach removec reliance on any single layer of protection to act to slow down an attack and provide alert telemetry that could be acted upon.
+
+#### Data.
+
+In almost all cases, attackers are after data.
+
+1. Stored in a database.
+2. Stored on disk inside virtual machines.
+3. Stored on a Saas application such as Microsoft 365.
+4. Stored in cloud storage.
+
+- It's responsibility of those storing and controlling access to data to ensure that it's properly secured.
+- There are regulatory requirement that dictate the controls and process that must be in place to ensure the **confidentiality , integrity and availability of the data**.
+
+#### Applicaiton
+
+- Ensure applications are secure and free of vulnerabilities.
+- Store sensitive application secret in a secure storage medium.
+- Make security a desigh requirement for all application development.
+
+Integrating security into the appication development life cycle will help reduce the number of vulnerabilities introduced in code.
+
+#### Compute.
+
+- Secure access to virtual machines.
+- Implementing endpoints protection and keep systems patched and current.
+
+- Malware, upatched sytems and improperly secured sytems open your enviromenment to attackers.
+  - Make sure you Layer is secure.
+
+#### Networking.
+
+- Limit Communication between resources.
+- Deny by default.
+- Restrict inbound internet access and limit outbound, where appropriate.
+- Implement secure connnectivity to on premises networks.
+
+Limiting this communication , you reduce the risk of lateral movement throughout your network.
+
+#### Perimeter.
+
+- Use distributed denial of service protection to filter large scale attacks before they can cause a denial of service for end users.
+- Use perimeter firewalls to identify and alert on malicionus attacks against your network.
+
+#### Identify and access.
+
+- control access to infrastructure and change control.
+- Use single sigh-in and multi-factor authentication.
+- Audit events and changes.
+
+The identify and access layer is all about ensuring identities are secure granted in only what is need and change are logged.
+
+#### Physical Security.
+
+- Pysical security and controlling acess to computing hardware within the data center in the first line of defense.
+
+- With physical security, the intend is to provide physica safeguards against access to assets.
+
+Azure helps alleviate your security concerns. But security is still a shared responsibility.
+
+### Get tips From Azure Security center.
+
+- Provide security recommendations based on your configurations, resources and networks.
+- Monitor security settings across on-premises and clound workloads, and automaticall apply required security to new services they come online.
+- Continously monitor your services and perform automatic security assessments to indenty potential vulnerabilities beforethey can be exploited.
+- use machine learning to dectect and block malware from being installed on your virtual machine and services, you can also define aist of allowed applications to ensure that only the apps you validate are allowed to execute.
+- Analyze and idetify potential inbound attacks, and help to investigate threats and any post-breach activity are allowed to execute.
+- Anayze and idetify potential inbound attacks and help to investigate threats and any post-breach activity that might have occurred.
+- Provide just-in-time access control for ports , reducing your attack surface by ensuring the network only allows that you require
+
+### Available tiers
+
+- Azure Security Center is available in two tiers:
+
+- Free. Available as part of your Azure subscription, this tier is limited to assessments and recommendations of Azure resources only.
+- Standard. This tier provides a full suite of security-related services including continuous monitoring, threat detection, just-in-time access control for ports, and more.
+
+#### Usage Scenarios
+
+You can integrate security center into your workflow and use it in mainy ways.
+
+1. use security center for incident response.
+
+- Many organization learn how to respond to security incidents only after suffering an attack.
+- You can use security center during the detection, access and diagonose stages.
+
+- **Detect.** Review the first indication of an event investigation. For example, you can use the Security Center dashboard to review the initial verification that a high-priority security alert was raised.
+- **Assess.** Perform the initial assessment to obtain more information about the suspicious activity. For example, obtain more information about the security alert.
+- **Diagnose.** Conduct a technical investigation and identify containment, mitigation, and workaround strategies. For example, follow the remediation steps described by Security Center in that particular security alert.
+
+2. Use Security center recommendations to enhance security.
+
+- You can reduce the chances of a significatn security event by configuring a security policy, and the impementing the recommendations provided by Azure security center.
+
+A security policy defines the set of controls that are recommended for resources within that specified subscription or resource group. In Security Center, you define policies according to your company's security requirements.
+
+Security Center analyzes the security state of your Azure resources. When Security Center identifies potential security vulnerabilities, it creates recommendations based on the controls set in the security policy. The recommendations guide you through the process of configuring the needed security controls. For example, if you have workloads that do not require the Azure SQL Database Transparent Data Encryption (TDE) policy, turn off the policy at the subscription level and enable it only in the resources groups where SQL TDE is required.
+
+- Network perimeters, firewalls, and physical access controls used to be the primary protection for corporate data.
+
+**Authentication** is the process of establishing the identity of a person or service looking to access a resource. It involves the act of challenging a party for legitimate credentials, and provides the basis for creating a security principal for identity and access control use. It establishes if they are who they say they are.
+
+**Authorization** is the process of establishing what level of access an authenticated person or service has. It specifies what data they're allowed to access and what they can do with it.
+
+
+- Microsoft Learn: Design for Security
+- Azure Security (Trust Center)
+- Azure Security Center planning and operations guide
+- What is Microsoft Azure Information Protection?
+- Azure Advanced Threat Protection
+- Configuring SSL for an application in Azure.
+- What are service certificates?
+- What are management certificates?
+- Get started with Key Vault certificates
+
+Cloud security is a shared responsibility between you and your cloud provider. Which category of cloud services requires the greatest security effort on your part?
+
+  - **Infrastructure as a service (IaaS)**
+At this level, the cloud provider provides physical security to compute resources. However, it's your responsibility to patch and secure your operating systems and software, as well as configure your network to be secure.
+
+- SSO centralizes user indentiy so you can disable an inactive account in a single step.
+
+- Encrypting your data at all times, both as it sits in your database and as it travels over the network, minimizes the opportunity for an attacker to access your data in plain text.
+
+### Apply and Monitor Infastructure standards with Azure Policy.
+
+- Goog IT governace involves planning your initiatives and setting priorities on strategic level to help manage and prevent issues.
+
+- You need goog governance when:
+  - You have multiple engineering teams working in Azure.
+  - You have multiple subscription in yur tenant.
+  - You have regulatory requirements that must be enforced.
+  - You want to ensure standards are followed for al IT allocated resources.
+- You could enforce standard by not allowing teas to directly create Azure resource. and instead have the IT team define and deploy all cloud-based assets.
+
+This approach is often the solution in on-premses situation, but thi requiremnt reduces the team agility and ability to innovate.
+
+- Azure provides several built-in features to track and anlyze your resource utilization and performance.
+
+  - Apply policies to control and audit resource creation.
+  - Lean how role-based security can fine-tune acess to your resources.
+  - Understand Microsoft policies and privacy guarnatees.
+  - Learn how to monitory your resources.
+
+- Planning out a consistent cloud infrastructure start with setting up policy.
+ - Your policies will enforce your rule for created resources, so your infastructure stays compliant with your corporate standarts, cost requirements and any service-leve agreements (SLAs) you have with your customers.
+
+ __Azure policy__ in an Azure service you use to create, assign and manage policies.
+  - This policies enforce diffrent rules and effect over your resources so that resources stay compliant with your resources.
+
+
+__Create a policy__
+
+The process of creating and implementing an Azure policy begins with creating a policy definition.
+ - Every policy definition has conditons under which it is enforced.
+
+To apply a policy you will.
+
+1. Create a policy definition.
+2. Assign a definition to a scope of resources.
+3. View policy evaluation result.
+
+__Policy definition__
+
+- A policy definition expresse what to evaluate and what action to take.
+  - You could ensure all public websites are secure with HTTPs, prevent a particular storage type from being creted or force a specific version of SQl server to be used.
+  
+- Types of policies.
+
+  1. allowed storage Account SKUs
+  2. Allowed Resource Type.
+  3. Allowed Location.
+  4. Allowed Virtual Machine SKUs
+  5. Not allowed resource types.
+
+### Apply an Azure policy.
+
+To apply a policy, we can use Azure portal or one of the command-line tools such as __azure powershell__ by adding the __microsoft .PolicyInsights extension.
+
+- Once we have registered the provider we can create a policy assignment. For example, here's a poicy definition that identifies virtual machine not using managed disks.
+
+#### Identify non-compliant resources.
+
+We can use the applied policy definition to identify resource that aren't compliant with the policy assingment through the Azure portal.
+
+The results match what you see in the Resource compliance tab of a policy assignment in the Azure portal.
+
+- Or we can again use te command-line tools to identify the resources in your resource group that are non-compliant to the policy assignment.
+
+### Assign a definition to a scope of resources.
+
+- Once you've defined one or more policy definitions you'll need to assign them. A __policy assignment__ policy definition that has been assignmed to take place withina specific scope.
+
+- This scope could range from a full subscription down to a resource group. __Policy assignment__ are inherited by a child resource.
+
+- You can assign any of these policies through the Azure portal, powershe or Azure cli.
+
+#### Policy effect
+
+- Request to create or update a resource through Azure resource manager are evaluated by Azure policy.
+
+- Policy create a list of all assigment that apply to the resources and then evaluated the resurce against each definition. Policy process severl of the effect before handling the request to the appropriate Resource provider to avoid any unnecessary processing if the resource violates policy.
+
+- Each policy definition in Azure Policy has a single effect. That effect determine what happens when the associated policy rule is matched. when that happens
+
+| Policy Effect     | What happens?                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Deny              | The resource creation/update fails due to policy.                                                                                                 |
+| Disabled          | The policy rule is ignored (disabled) often used for testing.                                                                                     |
+| Append            | Adds additional parameter/field to the requested resource during creaton or update.                                                               |
+| Audit             | Creates a warning event in the activity log when evaluationg a non-compliant resource, but it doesn't stop the request.                           |
+| DeployIFNotExists | Executes a template deployment when a specific condition is met. SQL encryption is enabled on a database, then if can run a teplate after the DB. |
+
+#### View policy evaluation results.
+
+Azure policy can allow a resource to be created even if it doesn't pass validation.
+ - You can have it trigger an audit event that can be viewed in the Azure policy portal, or through comand-line tools.
+
+- The easiest approach is in the portal as it provide a nice graphical overview that you cna explore.
+
+#### Remove a policy assignment.
+
+Finaly, you can delete policy requirements through the portal, or through the powershell command as shown below.
+
+
+### Organize policy with initiatives.
+
+- Managing a few policy definitions is easy, but once you have more than a few, you will want to organize them.
+
+- Initiative work alongside policies in Azure policy . An **initiative definition** is aset or group of policy definitions to help your compliance state for a larger goal.
+
+- Even if you have a single policy, we recoend using initiative if you anticipate increasing the number of policies over time.
+
+- Like a policy assignment , an __initiative assignment__ is an initiative definition assignment to a specific scope initiative assignments reduce the need to make several initiative definitions for each scope.
+
+- Once defined, initiatives can be assigned just as policies can - and they apply al the associated policy definitions.
+
+#### Defining initiatives.
+
+- __Initiative definitions__ simplify the process of managing and assigning policy definitions by grouping a set of policies into a sigle item.
+
+- ___Enable Monitoring in Azure Security center__ with a goal to monitor all the available security recomendations in your Azure security center.
+
+**Policy definitions**
+- Monitor unencrypted SQL database in security center.
+- Monitor OS vulnerabilities in Securtiy center.
+- Monitor missing Endpoint Protections in Security center.
+
+#### Manage access, policies and compliance across multiple Azure subscriptions.
+
+- Access management occurs at the Azure subcription level. This control allows an organizations to configur each division of the company in a specific fachion based on their responsibilities and requirements.
+
+### Manage subscription by using management groups.
+
+- Azure Management Groups are containers for managiong access, policies and compliance across __multiple Azure subsciptions__.
+
+- Management group allow you to order your Azure resource hierarchically into collection, which provide a further level of classification that is above the level of subscriptions.
+
+- All subscriptions within a mangement group automatically inherit the conditions applied to the management group. Management groups give your enterprise-grade management at a large scale nor matter what type of subscriptions you might have.
+
+![](images/4-management-groups-tree.png)
+
+#### Start Using Management groups
+
+- You can create management groups by using the __Azure portal__,__Azure powershell__ or __Azure CLI.
+
+- The first time your organizaition create a management group, there is an initial setup process. To get started in the portal, search for management groups and select __start using management groups__
+
+- Create your first management group by entering a management group Id and display name.
+  - The management group ID is the directory unique identifier and isn't editable after the group is created.
+
+#### Root management group of each organization.
+
+- After you select **save** on you first management group.
+ - A root management group is created in the Azure Active Directory (Azure AD)
+ - __Tenant root group__ The ID is the Azure AD ID. After this group is created all existing sub in Azure AD organization are made children of the root management group.
+
+##### Important facts about managements groups
+
+- Any Azure AD user in the organization can create a management group. The creator is given an owner role assingment.
+
+- A single Azure AD organization can support 10,000 management groups.
+
+- A management group tree can support up to six levels of depth not including the Root Level or subscription level.
+
+- Each management group can have many children.
+
+- When you organization creates subscriptions, they are automatically added to the root manegement group.
+
+#### Define standard resource with Azure Blueprints.
+
+- Adhering to security or compliance requirements, whether government or industry requirements
+ - To help you with auditing, traceability and compliance of your deployments use __Azure Blueprint__ artifacts and tools.
+
+ - __Azure Blueprints__ enable cloud architects and central information technology groups to define a repeatable set of Azure resources that implements and adheres to an organizations' standard pattern and requirements.
+
+ - Azure blueprints makes it possible for development teams to rapidly build and deploy new components such as __networking, to speed up development and delivery__
+
+ Azure blueprints is a declartive way to orchestrate the deployment of various resource template and other artifacts, such as:
+
+    - Role assignments.
+    - Policy assignments.
+    - Azure Resource Manager template.
+    - Resource groups.
+
+Azure Blueprints are also useful in azure Devops scenarions, where blueprints are associated with specific build artifact and release pipelines and can be tracked more rigorously.
+
+- The process of implementing Azure Blueprint consist of the following high-level steps.
+ 
+     1. Create an Azure blueprint.
+     2. Assign the blueprint.
+     3. Track the blueprint assingments.
+
+#### How is it different from Resource Manager Templates
+
+- The Azure blueprint service is designed to help with environment setup.
+  - This setup often consists of a set of resource groups, policies, role assignments and resource manager.
+  - A blueprint is a package to bring each of these artifact types together and allow you to compose and versions that package. through a **CI/CD**.
+- With blueprints, the relatonship between the blueprint definitions (what should be deployed) and the blueprint assignment (what was deployed) is preserved.
+- This connection support improved tracking and auditing of deployments.
+- Blueprints can also upgrade several subcription at once that are governed by the same blueprint.
+
+#### How it's different from Azure policy.
+
+A blurprint is a package or container for composing focus-specific sets of standards, patterns and requirements related to the implementation of Azure cloud services, security and design that can be reused to maintain consistency and compliance.
+
+- A policy is a default-allow and explicit deny syste focused on resource properties during deployent and for already existing resources.
+
+- Including a policy in a blueprint enables the creationg of the right pattern or design assingment of the blueprint.
+
+A policy can be included as one of many artifacst in a blueprint definition. Blueprints also support using parameters with policies and initiatives.
+
+### Explore your service compliance with compliance manager
+
+- Goverining your own resource and how they are used in only part of the solution when using a cloud provider. You also have to understand how the provider managers the underlying resources you are building on.
+
+- Microsoft takes this management seriously and provides full transparency with four sources.
+
+ 1. Microsoft Privacy Statement.
+
+- The microsoft privacy statement explain what personal data Microsfot processes
+  - the statement applies to the interaction Microsoft has with you and Microsoft product such as Microsoft services, websites, apps, software, servers and devices.
+- it is intended to provide oppenness and honesty about how Microsoft deals with personal data in its product and service.
+
+ 2.Microsoft Trust center.
+
+ __Trust Center__ is a website resource containing information and details about how Microsoft implements and support security , privacy , compliance and transparency.
+
+    - In-depth information about security, privacy, compliance offerings, policies, features, and practices across Microsoft cloud products.
+    - Recommended resources in the form of a curated list of the most applicable and widely used resources for each topic.
+    - Information specific to key organizational roles, including business managers, tenant admins or data security teams, risk assessment and privacy officers, and legal compliance teams.
+    - Cross-company document search, which is coming soon and will enable existing cloud service customers to search the Service Trust Portal.
+    - Direct guidance and support for when you can't find what you're looking for.
+
+### What is the Service Trust Portal?
+
+- The **service Trust Portal** (STP) host the compliance Manager service, and is the Microsoft public site for publishing audit reports and other compliance-related information relevant to Microsfts cloud services.
+
+- STP user can download audit report reporst produced by external auditors and gain insight from micorsoft-authored reporst that provide details on how Microsft builds and operates its cloud services.
+
+- STP also includes information about how Microsoft online service can help your organization maintain and track complinace with standards, laws and requlations such as:
+
+  - ISO
+  - SOC
+  - NIST
+  - FedRAMP
+  - GDPR
+
+ 3. Service Trust Portal.
+
+Service Trust Portal is a companion feature to the Trust Center and allow you to:
+  - Access audit report across __Microsoft cloud__ services on a single page.
+  - Access compliance guide to help you understand how you can use Microsft cloud services.
+
+
+ 4. Compiance Manager.
+
+ __Compliance Manager__ is a workflow-based rish assessment dashboard within the Service Trust Portal that enables you to track, assign and verify your organizations regulatory complinace activities related to Microsft professional services and Microsfot cloud services such as office.
+
+ Compliance Manager provides the following feauters.
+
+- Azure provides two primary services to monitor the health of your apps and resources.
+
+- Azure Monitor
+- Azure Service Health
+
+
+Monitor your service health
+8 minutes
+Defining policy and access provides fine-grained control over resources in your cloud IT infrastructure. Once those resources are deployed, you will want to know about any issues or performance problems they might encounter.
+
+Azure provides two primary services to monitor the health of your apps and resources.
+
+Azure Monitor
+Azure Service Health
+Azure Monitor
+
+
+Azure Monitor maximizes the availability and performance of your applications by delivering a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. It helps you understand how your applications are performing and proactively identifies issues affecting them and the resources they depend on.
+
+Data sources
+Azure Monitor can collect data from a variety of sources. You can think of monitoring data for your applications in tiers ranging from your application, any operating system and services it relies on, and down to the platform itself.
+
+TABLE 1
+Data tier	Description
+Application monitoring data	Data about the performance and functionality of the code you have written, regardless of its platform.
+Guest OS monitoring data	Data about the operating system on which your application is running. This could be running in Azure, another cloud, or on-premises.
+Azure resource monitoring data	Data about the operation of an Azure resource.
+Azure subscription monitoring data	Data about the operation and management of an Azure subscription, as well as data about the health and operation of Azure itself.
+Azure tenant monitoring data	Data about the operation of tenant-level Azure services, such as Azure Active Directory.
+Diagnostic settings
+As soon as you create an Azure subscription and start adding resources such as virtual machines and web apps, Azure Monitor starts collecting data. Activity Logs record when resources are created or modified and Metrics tell you how the resource is performing and the resources that it's consuming.
+
+You can extend the data you're collecting into the actual operation of the resources by enabling diagnostics and adding an agent to compute resources. Under resource settings, you can enable Diagnostics
+
+Enable guest-level monitoring
+Performance counters: collect performance data
+Event Logs: enable various event logs
+Crash Dumps: enable or disable
+Sinks: send your diagnostic data to other services for more analysis
+Agent: configure agent settings
+Getting more data from your apps
+Data monitoring is only useful if it improves your visibility of the operations in your computing environment. Azure Monitor includes several features and tools that provide valuable insights into your applications, and the other resources they may depend on.
+
+Application Insights is a service that monitors the availability, performance, and usage of your web applications, whether they're hosted in the cloud or on-premises. It leverages the powerful data analysis platform in Log Analytics to provide you with deeper insights into your application's operations. Application Insights can diagnose errors without waiting for a user to report them. Application Insights includes connection points to a variety of development tools, and integrates with Microsoft Visual Studio to support your DevOps processes.
+
+Azure Monitor for containers is a service that is designed to monitor the performance of container workloads, which are deployed to managed Kubernetes clusters, hosted on Azure Kubernetes Service (AKS). It gives you performance visibility by collecting memory and processor metrics from controllers, nodes, and containers, which are available in Kubernetes through the metrics API. Container logs are also collected.
+
+Azure Monitor for VMs is a service that monitors your Azure VMs at scale, by analyzing the performance and health of your Windows and Linux VMs (including their different processes and interconnected dependencies on other resources, and external processes). Azure Monitor for VMs includes support for monitoring performance and application dependencies for VMs hosted on-premises, and for VMs hosted with other cloud providers.
+
+Integrating any, or all, of these monitoring services with Azure Service Health has additional benefits. Staying informed of the health status of Azure services will help you understand if, and when, an issue affecting an Azure service is impacting your environment. What may seem like a localized problem could be the result of a more widespread issue, and Azure Service Health provides this kind of insight. Azure Service Health identifies any issues with Azure services that might affect your application. Azure Service Health also helps you to plan for scheduled maintenance.
+
+Responding to alert conditions
+In addition to allowing you to analyze your monitoring data interactively, an effective monitoring solution must respond proactively to any critical conditions that are identified within the data it collects. This might involve, for example, sending a text or email to an administrator who is responsible for investigating an issue, or launching an automated process that attempts to correct an error condition.
+
+Alerts. Azure Monitor proactively notifies you of critical conditions using alerts, and can potentially attempt to take corrective actions. Alert rules based on metrics can provide alerts in almost real-time, based on numeric values. Alert rules based on logs allow for complex logic across data, from multiple sources.
+
+Autoscale. Azure Monitor uses Autoscale to ensure that you have the right amount of resources running to manage the load on your application effectively. Autoscale enables you to create rules that use metrics, collected by Azure Monitor, to determine when to automatically add resources to handle increases in load. Autoscale can also help reduce your Azure costs by removing resources that are not being used. You can specify a minimum and maximum number of instances, and provide the logic that determines when Autoscale should increase or decrease resources.
+
+Visualize monitoring data
+Visualizations, such as charts and tables, are effective tools for summarizing monitoring data and for presenting data to different audiences. Azure Monitor has its own features for visualizing monitoring data, and it leverages other Azure services for publishing data for different audiences. Other tools you may use for visualizing data, for particular audiences and scenarios, include:
+
+Dashboards
+Views
+Power BI
+Integrate with other services
+You'll often need to integrate Azure Monitor with other systems, and build customized solutions that use your monitoring data. Other Azure services can work with Azure Monitor to provide this integration.
+
+Azure Service Health
+
+
+Azure Service Health is a suite of experiences that provide personalized guidance and support when issues with Azure services affect you. It can notify you, help you understand the impact of issues, and keep you updated as the issue is resolved. Azure Service Health can also help you prepare for planned maintenance and changes that could affect the availability of your resources.
+
+Azure Service Health is composed of the following views .
+
+Azure Status provides a global view of the health state of Azure services. With Azure Status, you can get up-to-the-minute information on service availability. Everyone has access to Azure Status and can view all services that report their health state.
+
+Service Health provides you with a customizable dashboard that tracks the state of your Azure services in the regions where you use them. In this dashboard, you can track active events such as ongoing service issues, upcoming planned maintenance, or relevant Health advisories. When events become inactive, they are placed in your Health history for up to 90 days. Finally, you can use the Service Health dashboard to create and manage service Health alerts, which notify you whenever there are service issues that affect you.
+
+Resource Health helps you diagnose and obtain support when an Azure service issue affects your resources. It provides you with details about the current and past state of your resources. It also provides technical support to help you mitigate problems. In contrast to Azure Status, which informs you about service problems that affect a broad set of Azure customers, Resource Health gives you a personalized dashboard of your resources' health. Resource Health shows you times, in the past, when your resources were unavailable because of Azure service problems. It's then easier for you to understand if an SLA was violated.
+
+Together, the Azure Service Health components provide you with a comprehensive view of the health status of Azure, at the level of granularity that is most relevant to you.
+
+
+
+
+### Principle of resource group.
+
+Resource groups are a fundamental element of the Azure platform. A resource group is a logical container of resources deployed on Azure.
+
+These resource are anything you create in an Azure subscription like virtual machine, application gateways and consmoDB instance.
+
+All resources must be in a resource group and resources can only be a member of a single resource group.
+
+Many resources can be moved between resource groups with some services having specific limitations or requirements to move. Resources groups can't be nested . Before any resource can be provisioned, you need a resource group for it to be placed in.
+
+1. Logical groupings.
+2. Life cycle.
+3.Authorizations.
+
+## Create a Resource Group
+
+Resource groups can be created by using the following methods:
+  Azure portal
+  Azure PowerShell
+  Azure CLI
+  Templates
+  Azure SDKs (like .NET, Java)
+
+Let's walk through the steps you'd take to create a resource group in the Azure portal. If you'd like to follow along in your own subscription, you may.
+
+### Organizing principles
+
+1. By resource (resource group for vms.)
+2. Organizing for life cycle.
+3. Organizing for bilings.
+
+## Use tagging to organize resources.
+
+- You've gone through your resources and moved them into resource groups that are more organized than before. 
+
+### What are tags?
+
+- Tags are name/value pairs of text data that you can apply to reources and resource groups.
+ - Tags allow you to associate custom details about your resource.
+   - standard Azure properties a resource has the following properties.
+    1. department (like finance, marketing and more.)
+    2. environment (prod, test, dev)
+    3. Cost center.
+    4. Life cycle and automation (like shutdown and starup or VMs)
+
+- A resource can have up to 50 tags.
+- The name is limited to 512 characters for all types of resources except storage accounts.
+   - storage limit is 128 characters.
+- The tag valu is limited to 256 characters for all types of resources.
+- Tags aren't inherited from parent resources. Not all resource types support tags, and tags can't be applied to classic resources.
+
+Tags can be added and manipulated throudh the **Azure portal, Azure   CLI and Azure Poweshell, Resource Manager template and through the Rest API**
+
+- You can use **Azure policy** to automatically add or enforce tags for resources your organization creates based on policy conditions that you define.
+  - You could require that a value for the Department tag is entered when someone in your organzation create a virtual network in a specific resource group.
+
+#### use tags for organization.
+
+- You can use tags to group your biling data. For example if you're ruuning multiple VMS for diffrent organzations use the tags to group usage by cost center. You can also use tags to categorize cost center. You can also use tags to categorize cost by runtime environment.
+
+- When exporting billing data or accessing it through billing apis, tags are included in that data and can be used to futher slice your data form a cost perspective.
+
+- You can retrive all the resources in your subscription with a specific tag name or Values. Tags enables you to retrive related resources from different resources groups. This approach is helpful when you need to organize resource for biling and managemet.
+
+- Tagiing resources can alco help in monitoring to track down impaacted resources.
+- Monitoring systems could include tag data withe alerts, giving you the ability to know exactly who is impacted.
+
+- It's also common for tags to be used in automation. If you want to automate the shutdown and startup of virtual machines in development environments during off-hours to save cost you can use tags to assist in this automation.
+
+### Use policies to enforce standards.
+
+### what is Azure Policy?
+
+Azure policy is a service you can use to create , assign and mange policies.
+- These policies apply and enforce rules that your resources need to follow. 
+- Can be evaluated against existing resources to give visiblity into compliance.
+- Policies can enforce things such as anly allowing specific types of resources to be created.
+ - Only allowing resources in specific Azure regions.
+ - Yoyu can enforce naming conventions across your Azure environment. You can also enforce that specific tags are applied to resource.
+
+#### Create a policy.
+
+- Navigate to the [Azure portal]() in a web browser if your haven't already. In the search box in the top navigation bar, search for **
+
+### Test out the policy.
+
+Now that you have assigned the policy to your resource group any attempts to create a resource without the **Department** tag should fail. Try this out.
+
+ - Place node the policy assignment may take up to 39 minute to take effect. Because of this delay, in the following steps the policy validation may succed but the deployment will still fail.
+
+### Use policies to enforce standards.
+
+You've seen how you could use policies to ensure that your resources have the tags that organize your resources. There are other ways polcies can be used to our benefit.
+
+You could use policy to restrict with Azure regions you can deploy resource to. For organixations that are heavily regulated or have legal or regulatory restrictions on where data can reside polices.
+
+You could use policy policy to restrict which types of virtual machine sizes can be deployed. You may want to allow large VM sizes in your production subscriptions, but maybe you'd like to ensure that you keep costs minimized in your dev subcriptions.
+
+By denying the large VM sizes through policy in your dev subscription , you can ensure they don't get deployed in these envirnments.
+
+- You could also use policy to enforce naming conventions. If your organization has standardized on specific naming conventions, using policy to enforce the conventions helps us to keep a consistent naming standard across your Azure resources.
+
+### Secure resources with role-based access control.
+
+Implementing Azure Policy -ensured that all our employees with Azure access are following our internal standards for creating resources, but we have a second issue we need to solve: how do we protect those resources once they are deployed?
+
+We have IT personnel that need to manage settings, developers that need to have read-only acess, and administrators that need to be able to control themi completely. Enter ROle-based access control (RBAC)
+
+Using RBAC you can:
+
+- Allow one user to manage VMs in a subcription, and another user to mange virtual networks.
+- Allow a database administrator (DBA) group to manage SQL databasese in a subscription.
+- Allow a user to manage all resources in a resource group. such as VMs, webside and virtual subnets.
+- Allow an application to access all resources in resource group.
+
+To view access permissions, use the **Access control (IAM)** panel for the resource in the Azure portal.
+
+### How RBAC defines access.
+
+RBAC uses an __allow model__ for access. When you are assigned to a __role, RBAC allows you to perform specific action, such as read , write and delete.
+
+If one role assignment grants you read permissions to a resource group, and a different role assignment grants you write permissions to the same resource group, you will have both read and write permissions on the resource group.
+
+#### Best practices for RBAC
+
+- Segragate duties within your tea and grant only the amout of acess to users that they need to perform their jobs. Instead of giving everybody unrestricted permissions in your Azure subscription of resource, allow only specific aciton adt a particular scope.
+- When planning your acess control strategy, grant users the lowest previlege level tht they need to work their work
+
+- Use __Resource Locks__ to ensure critical resources aren't modified or deleted.
+
+### Use rosource locks to protect resources.
+
+#### What are resource locks?
+
+Resource lock are a settings that can be applied to any resource to block modificaton or deletion. Resoruce locks can set to either __delete__ or __read Only__
+
+- __Delete__ will allow all oprations against the resource but block the ability to delete it. 
+
+- __Read-only__ will only allow read activities to be performed against it, blocking any odification or deletions of the resource,
+
+__Resource locks__ can be applied to subscriptions , resource groups and to individual resources and are inherted when appliend at higher levels.
+
+ Resource locks apply regardless of RBAC permissions.
+
+  -Even if you are an owner of the resource, you must stil remove the lock before you'l actuall be able to perform the blocked activity.
+
+### Using resource locks on practice
+
+- You've seen how resource locks can protect from accidental deletion.
+  - In order to delete the virtual network, you needed to remove the lock. This concerted action help ensure that you really intend to delete or modify the resource in question.
+
+- Use resource lock to protect those key pieces of Azure that could have a large impact if they were removed or modified. Some examples are ExpressRoute circuits and virtual network, critical databases and domail controllers. Evaluate your resources and apply locks where you'd like to have an extra layer of protection from accidental actions.
+
+
+### Predict cost and optimize spending for Azure.
+
+- Cost is one of the most important aspects of the cloud and can have a massive impaccts on your business.
+ -  Azure has several tools available to help you get a better undestanding of cloud spend and some practices that you can levrage to help you save money.
+
+
+#### What we learn.
+
+1. Learn the different options you have to purchase Azure services.
+2. Estimate const with the Azure pricing calculator.
+3. Predict and optiize costs with Azure cost management and Azure advisor.
+4. Apply best practises for saving on infrastructure costs.
+5. Apply best practise for saving on licensing costs.
+
+#### intro
+
+- When planning a solution in the cloud, there's always the challenge of balancing cost against perfomance.
+
+##### You need to be able to confidently answer several questions:
+
+  1. What will this solution cost this fiscal year?
+  2. Is there an alternate configuration you could use to save money?
+  3. Can you estimaet how a change would inpact your cost and performance without putting it into production system?
+
+ ##### Learning Objectives
+
+ - Learn the different options you have to purchaes Azure services.
+ - Estimate costs with the Azure pricing calculator.
+ - Predict and optimize costs with Azure cost Management and Azure Advisor.
+ - Apply best practices for saving on infrastructure costs
+ - Apply best practices for saving on licensing costs.
+
+### Purchase Azure products and service.
+
+- Products and services in Azure are arrnged by category.
+   - with various resources that you can provision. 
+      - You select the Azure product and services that fit your requirement you account is billed according to __Azure's pay for what you use model__
+
+### Usage Meters
+
+- When you provision an Azure resource, Azure Create one or more meter instances for that resource. The meter track the resource's usage, and genrate a usage record that is used and genrate a usage record that is used to calculate you bill.
+
+For example a single virtual machine that you provisone in Azure might have the following meters tracking its usage.
+
+    - Compute Hours
+    - IP Address Hours
+    - Data Transfer in
+    - Data Transfer Out.
+    - Standard Managed Disk
+    - Standard IO-Disk
+    - Standard IO-Block Blob Read
+    - Standard IO-Block Blob Write
+    - Standard IO-Block Blob Delete
+  
+The meter and pricing vary per product and often have different pricing tiers based on the size or capacity of te resource.
+
+At the end of each monthly billing cycle, the usage values will be charged to your payment method and meter are reset. You can check the biling page in the Azure portal at any time to get a quick summary of your current usage and see any invoices for past billing cycles.
+
+- The key takeaway is that resource are always charged based on usage.
+   If you de-allocate a vm then you wil not be billed for computer hours, I/O read or write or the private IP address since the VM is not running and has not allocated compute resources.
+
+__De-allocating__ a vm is not the same as __deleting__ a VM.
+  De-allocating means the VM is not assigned to a CPU or network in a datacenter.
+  - Your persistent disks remain and resource is present in your subscription. It's similar to turning off your physical computer.
+
+#### Factors affectin costs.
+
+  Just like your on-permises equipment costs, there are several elements that will affect your monthly costs when using Azure services.
+
+##### Resource type
+
+  Cost are resource-specific, so the usage that a meter tracks and the number of meters associated with a resource depend on the resource type.
+
+Each meter track __a particular kind of usage__. for example a meter might track bandwidth usage (ingress network traffic in bits per seconds) the number of operations, size (storage capacity in byte)
+
+##### Services
+
+Azure usage rates and billing periods can differ between Enterprise, Web Direct and cloud solution Provider (CSP) customer.
+
+The Azure team develops and offers first-party products and service, while products and services from third-party vendors are available.
+
+##### Location
+
+Azure has datacenters all over the world. usage cost vary between locations that offer particular Azure product, services and resource based on popularity, demand and ocal infrastructure cost.
+
+##### Azure billing zones
+
+- Bandwidth refer to data moving in and out of Azure datacenters.
+- Most of the time inbound data transfer (data going into Azure datacenters) are free.
+- For outbound data transfer (data going out of azure datacenters), the data transfer pricing is based on **Billing Zones**
+
+A __Zone__ is geographical grouping of Azure Regions for billing purposes. The following Zone exist and includ the listed countries (regions)
+
+In most zones, the first outbound 5 gb per month are free. After that amount you are billed a fixed price per GB.
+
+__Billing Zones aren't the same as an Availability Zone__. In Azure the term zone is for billing purposes only, and the full term Availability zone referst to the failure protection that azure provides for datacenters.
+
+#### estimate const with azure pricing calculator.
+
+To make estimateong easy for customers . Microsoft developed the Azure pricing calculator.
+The Azure pricing calculator is a free web-based tool that allows you to input Azure services and modify properties and options of the services. 
+
+The option that you can configur in the pricing calculator vary between products, but basic configuration opitons includes.
+
+The options that you can configur in the pricing calculator vary between products, but basic configuration options include:
+
+1. __Region__ List the regions from which you can provision a product.
+2. __Tier__ Sets the type of tier you wish to allocate to a selected resource such as Free tier, Basic Tier.
+3. __Billing options__ Highlight the billing options available to different types of customers and subscriptions for a chosen product.
+4. __support options__ Allow you to pick from included or paid support pricing options for a seected product.
+5. __Program and offers__ Allows you to choose from available price offerings according to your customers or subscription type.
+6. __Azure Dev/Test Pricing__ resource witin an Azure subsription that is based on a Dev/Test offer.
+
+#### Estimate the Total cost of ownership with the Azure TCO caculator.
+
+- The pricing calculator and cost management advisor can help you predict and anlyze your spend for new or exising services.
+
+- If you are starting to migrate to the cloud, a useful tool you can use to predict your const savings in the __Total cost of ownership__ (TCO) calculator.
+
+
+
